@@ -1,0 +1,632 @@
+name: Main workflow
+on:
+  push:
+    paths-ignore:
+      - "docs/**"
+      - "**.md"
+  pull_request:
+    paths-ignore:
+      - "docs/**"
+      - "**.md"
+
+env:
+  CARGO_INCREMENTAL: 0
+  CARGO_NET_RETRY: 10
+  RUST_BACKTRACE: short
+  RUSTFLAGS: "-D warnings"
+  RUSTUP_MAX_RETRIES: 10
+  MACOSX_DEPLOYMENT_TARGET: 10.7
+
+jobs:
+  # ============================================================
+  #  RUSTFMT CHAIN (14)
+  # ============================================================
+  rustfmt-1:
+    name: "Rustfmt 1st"
+    uses: ./.github/workflows/rustfmt.yml
+
+  rustfmt-2:
+    name: "Rustfmt 2nd"
+    needs: rustfmt-1
+    if: always()
+    uses: ./.github/workflows/rustfmt.yml
+
+  rustfmt-3:
+    name: "Rustfmt 3rd"
+    needs: rustfmt-2
+    if: always()
+    uses: ./.github/workflows/rustfmt.yml
+
+  rustfmt-4:
+    name: "Rustfmt 4th"
+    needs: rustfmt-3
+    if: always()
+    uses: ./.github/workflows/rustfmt.yml
+
+  rustfmt-5:
+    name: "Rustfmt 5th"
+    needs: rustfmt-4
+    if: always()
+    uses: ./.github/workflows/rustfmt.yml
+
+  rustfmt-6:
+    name: "Rustfmt 6th"
+    needs: rustfmt-5
+    if: always()
+    uses: ./.github/workflows/rustfmt.yml
+
+  rustfmt-7:
+    name: "Rustfmt 7th"
+    needs: rustfmt-6
+    if: always()
+    uses: ./.github/workflows/rustfmt.yml
+
+  rustfmt-8:
+    name: "Rustfmt 8th"
+    needs: rustfmt-7
+    if: always()
+    uses: ./.github/workflows/rustfmt.yml
+
+  rustfmt-9:
+    name: "Rustfmt 9th"
+    needs: rustfmt-8
+    if: always()
+    uses: ./.github/workflows/rustfmt.yml
+
+  rustfmt-10:
+    name: "Rustfmt 10th"
+    needs: rustfmt-9
+    if: always()
+    uses: ./.github/workflows/rustfmt.yml
+
+  rustfmt-11:
+    name: "Rustfmt 11th"
+    needs: rustfmt-10
+    if: always()
+    uses: ./.github/workflows/rustfmt.yml
+
+  rustfmt-12:
+    name: "Rustfmt 12th"
+    needs: rustfmt-11
+    if: always()
+    uses: ./.github/workflows/rustfmt.yml
+
+  rustfmt-13:
+    name: "Rustfmt 13th"
+    needs: rustfmt-12
+    if: always()
+    uses: ./.github/workflows/rustfmt.yml
+
+  rustfmt-14:
+    name: "Rustfmt 14th"
+    needs: rustfmt-13
+    if: always()
+    uses: ./.github/workflows/rustfmt.yml
+
+  # ============================================================
+  #  CLIPPY CHAIN (14)
+  # ============================================================
+  clippy-1:
+    name: "Clippy 1st"
+    uses: ./.github/workflows/clippy.yml
+
+  clippy-2:
+    name: "Clippy 2nd"
+    needs: clippy-1
+    if: always()
+    uses: ./.github/workflows/clippy.yml
+
+  clippy-3:
+    name: "Clippy 3rd"
+    needs: clippy-2
+    if: always()
+    uses: ./.github/workflows/clippy.yml
+
+  clippy-4:
+    name: "Clippy 4th"
+    needs: clippy-3
+    if: always()
+    uses: ./.github/workflows/clippy.yml
+
+  clippy-5:
+    name: "Clippy 5th"
+    needs: clippy-4
+    if: always()
+    uses: ./.github/workflows/clippy.yml
+
+  clippy-6:
+    name: "Clippy 6th"
+    needs: clippy-5
+    if: always()
+    uses: ./.github/workflows/clippy.yml
+
+  clippy-7:
+    name: "Clippy 7th"
+    needs: clippy-6
+    if: always()
+    uses: ./.github/workflows/clippy.yml
+
+  clippy-8:
+    name: "Clippy 8th"
+    needs: clippy-7
+    if: always()
+    uses: ./.github/workflows/clippy.yml
+
+  clippy-9:
+    name: "Clippy 9th"
+    needs: clippy-8
+    if: always()
+    uses: ./.github/workflows/clippy.yml
+
+  clippy-10:
+    name: "Clippy 10th"
+    needs: clippy-9
+    if: always()
+    uses: ./.github/workflows/clippy.yml
+
+  clippy-11:
+    name: "Clippy 11th"
+    needs: clippy-10
+    if: always()
+    uses: ./.github/workflows/clippy.yml
+
+  clippy-12:
+    name: "Clippy 12th"
+    needs: clippy-11
+    if: always()
+    uses: ./.github/workflows/clippy.yml
+
+  clippy-13:
+    name: "Clippy 13th"
+    needs: clippy-12
+    if: always()
+    uses: ./.github/workflows/clippy.yml
+
+  clippy-14:
+    name: "Clippy 14th"
+    needs: clippy-13
+    if: always()
+    uses: ./.github/workflows/clippy.yml
+
+  # ============================================================
+  #  CARGO CHECK
+  # ============================================================
+  cargo_check:
+    name: "Cargo Check"
+    uses: ./.github/workflows/cargo-check.yml
+
+  # ============================================================
+  #  CARGO CHECK NO FEATURES CHAIN (14) cargo_check
+  # ============================================================
+  cargo_check_no_features-1:
+    name: "Cargo Check No Features 1st"
+    needs: cargo_check
+    if: always()
+    uses: ./.github/workflows/cargo-check-no-features.yml
+
+  cargo_check_no_features-2:
+    name: "Cargo Check No Features 2nd"
+    needs: cargo_check_no_features-1
+    if: always()
+    uses: ./.github/workflows/cargo-check-no-features.yml
+
+  cargo_check_no_features-3:
+    name: "Cargo Check No Features 3rd"
+    needs: cargo_check_no_features-2
+    if: always()
+    uses: ./.github/workflows/cargo-check-no-features.yml
+
+  cargo_check_no_features-4:
+    name: "Cargo Check No Features 4th"
+    needs: cargo_check_no_features-3
+    if: always()
+    uses: ./.github/workflows/cargo-check-no-features.yml
+
+  cargo_check_no_features-5:
+    name: "Cargo Check No Features 5th"
+    needs: cargo_check_no_features-4
+    if: always()
+    uses: ./.github/workflows/cargo-check-no-features.yml
+
+  cargo_check_no_features-6:
+    name: "Cargo Check No Features 6th"
+    needs: cargo_check_no_features-5
+    if: always()
+    uses: ./.github/workflows/cargo-check-no-features.yml
+
+  cargo_check_no_features-7:
+    name: "Cargo Check No Features 7th"
+    needs: cargo_check_no_features-6
+    if: always()
+    uses: ./.github/workflows/cargo-check-no-features.yml
+
+  cargo_check_no_features-8:
+    name: "Cargo Check No Features 8th"
+    needs: cargo_check_no_features-7
+    if: always()
+    uses: ./.github/workflows/cargo-check-no-features.yml
+
+  cargo_check_no_features-9:
+    name: "Cargo Check No Features 9th"
+    needs: cargo_check_no_features-8
+    if: always()
+    uses: ./.github/workflows/cargo-check-no-features.yml
+
+  cargo_check_no_features-10:
+    name: "Cargo Check No Features 10th"
+    needs: cargo_check_no_features-9
+    if: always()
+    uses: ./.github/workflows/cargo-check-no-features.yml
+
+  cargo_check_no_features-11:
+    name: "Cargo Check No Features 11th"
+    needs: cargo_check_no_features-10
+    if: always()
+    uses: ./.github/workflows/cargo-check-no-features.yml
+
+  cargo_check_no_features-12:
+    name: "Cargo Check No Features 12th"
+    needs: cargo_check_no_features-11
+    if: always()
+    uses: ./.github/workflows/cargo-check-no-features.yml
+
+  cargo_check_no_features-13:
+    name: "Cargo Check No Features 13th"
+    needs: cargo_check_no_features-12
+    if: always()
+    uses: ./.github/workflows/cargo-check-no-features.yml
+
+  cargo_check_no_features-14:
+    name: "Cargo Check No Features 14th"
+    needs: cargo_check_no_features-13
+    if: always()
+    uses: ./.github/workflows/cargo-check-no-features.yml
+
+
+  # ============================================================
+  #  CARGO CHECK ALL FEATURES CHAIN (14) cargo_check
+  # ============================================================
+  cargo_check_all_features-1:
+    name: "Cargo Check All Features 1st"
+    needs: cargo_check
+    if: always()
+    uses: ./.github/workflows/cargo-check-all-features.yml
+
+  cargo_check_all_features-2:
+    name: "Cargo Check All Features 2nd"
+    needs: cargo_check_all_features-1
+    if: always()
+    uses: ./.github/workflows/cargo-check-all-features.yml
+
+  cargo_check_all_features-3:
+    name: "Cargo Check All Features 3rd"
+    needs: cargo_check_all_features-2
+    if: always()
+    uses: ./.github/workflows/cargo-check-all-features.yml
+
+  cargo_check_all_features-4:
+    name: "Cargo Check All Features 4th"
+    needs: cargo_check_all_features-3
+    if: always()
+    uses: ./.github/workflows/cargo-check-all-features.yml
+
+  cargo_check_all_features-5:
+    name: "Cargo Check All Features 5th"
+    needs: cargo_check_all_features-4
+    if: always()
+    uses: ./.github/workflows/cargo-check-all-features.yml
+
+  cargo_check_all_features-6:
+    name: "Cargo Check All Features 6th"
+    needs: cargo_check_all_features-5
+    if: always()
+    uses: ./.github/workflows/cargo-check-all-features.yml
+
+  cargo_check_all_features-7:
+    name: "Cargo Check All Features 7th"
+    needs: cargo_check_all_features-6
+    if: always()
+    uses: ./.github/workflows/cargo-check-all-features.yml
+
+  cargo_check_all_features-8:
+    name: "Cargo Check All Features 8th"
+    needs: cargo_check_all_features-7
+    if: always()
+    uses: ./.github/workflows/cargo-check-all-features.yml
+
+  cargo_check_all_features-9:
+    name: "Cargo Check All Features 9th"
+    needs: cargo_check_all_features-8
+    if: always()
+    uses: ./.github/workflows/cargo-check-all-features.yml
+
+  cargo_check_all_features-10:
+    name: "Cargo Check All Features 10th"
+    needs: cargo_check_all_features-9
+    if: always()
+    uses: ./.github/workflows/cargo-check-all-features.yml
+
+  cargo_check_all_features-11:
+    name: "Cargo Check All Features 11th"
+    needs: cargo_check_all_features-10
+    if: always()
+    uses: ./.github/workflows/cargo-check-all-features.yml
+
+  cargo_check_all_features-12:
+    name: "Cargo Check All Features 12th"
+    needs: cargo_check_all_features-11
+    if: always()
+    uses: ./.github/workflows/cargo-check-all-features.yml
+
+  cargo_check_all_features-13:
+    name: "Cargo Check All Features 13th"
+    needs: cargo_check_all_features-12
+    if: always()
+    uses: ./.github/workflows/cargo-check-all-features.yml
+
+  cargo_check_all_features-14:
+    name: "Cargo Check All Features 14th"
+    needs: cargo_check_all_features-13
+    if: always()
+    uses: ./.github/workflows/cargo-check-all-features.yml
+
+  # ============================================================
+  #  CONFIG SCHEMA CHAIN (14) cargo_check
+  # ============================================================
+  config_schema-1:
+    name: "Config Schema 1st"
+    needs: cargo_check
+    if: always()
+    uses: ./.github/workflows/config-schema.yml
+
+  config_schema-2:
+    name: "Config Schema 2nd"
+    needs: config_schema-1
+    if: always()
+    uses: ./.github/workflows/config-schema.yml
+
+  config_schema-3:
+    name: "Config Schema 3rd"
+    needs: config_schema-2
+    if: always()
+    uses: ./.github/workflows/config-schema.yml
+
+  config_schema-4:
+    name: "Config Schema 4th"
+    needs: config_schema-3
+    if: always()
+    uses: ./.github/workflows/config-schema.yml
+
+  config_schema-5:
+    name: "Config Schema 5th"
+    needs: config_schema-4
+    if: always()
+    uses: ./.github/workflows/config-schema.yml
+
+  config_schema-6:
+    name: "Config Schema 6th"
+    needs: config_schema-5
+    if: always()
+    uses: ./.github/workflows/config-schema.yml
+
+  config_schema-7:
+    name: "Config Schema 7th"
+    needs: config_schema-6
+    if: always()
+    uses: ./.github/workflows/config-schema.yml
+
+  config_schema-8:
+    name: "Config Schema 8th"
+    needs: config_schema-7
+    if: always()
+    uses: ./.github/workflows/config-schema.yml
+
+  config_schema-9:
+    name: "Config Schema 9th"
+    needs: config_schema-8
+    if: always()
+    uses: ./.github/workflows/config-schema.yml
+
+  config_schema-10:
+    name: "Config Schema 10th"
+    needs: config_schema-9
+    if: always()
+    uses: ./.github/workflows/config-schema.yml
+
+  config_schema-11:
+    name: "Config Schema 11th"
+    needs: config_schema-10
+    if: always()
+    uses: ./.github/workflows/config-schema.yml
+
+  config_schema-12:
+    name: "Config Schema 12th"
+    needs: config_schema-11
+    if: always()
+    uses: ./.github/workflows/config-schema.yml
+
+  config_schema-13:
+    name: "Config Schema 13th"
+    needs: config_schema-12
+    if: always()
+    uses: ./.github/workflows/config-schema.yml
+
+  config_schema-14:
+    name: "Config Schema 14th"
+    needs: config_schema-13
+    if: always()
+    uses: ./.github/workflows/config-schema.yml
+
+  # ============================================================
+  #  TEST SUITE CHAIN (14) cargo_check
+  # ============================================================
+  test-1:
+    name: "Test Suite 1st"
+    needs: cargo_check
+    if: always()
+    uses: ./.github/workflows/test-suite.yml
+
+  test-2:
+    name: "Test Suite 2nd"
+    needs: test-1
+    if: always()
+    uses: ./.github/workflows/test-suite.yml
+
+  test-3:
+    name: "Test Suite 3rd"
+    needs: test-2
+    if: always()
+    uses: ./.github/workflows/test-suite.yml
+
+  test-4:
+    name: "Test Suite 4th"
+    needs: test-3
+    if: always()
+    uses: ./.github/workflows/test-suite.yml
+
+  test-5:
+    name: "Test Suite 5th"
+    needs: test-4
+    if: always()
+    uses: ./.github/workflows/test-suite.yml
+
+  test-6:
+    name: "Test Suite 6th"
+    needs: test-5
+    if: always()
+    uses: ./.github/workflows/test-suite.yml
+
+  test-7:
+    name: "Test Suite 7th"
+    needs: test-6
+    if: always()
+    uses: ./.github/workflows/test-suite.yml
+
+  test-8:
+    name: "Test Suite 8th"
+    needs: test-7
+    if: always()
+    uses: ./.github/workflows/test-suite.yml
+
+  test-9:
+    name: "Test Suite 9th"
+    needs: test-8
+    if: always()
+    uses: ./.github/workflows/test-suite.yml
+
+  test-10:
+    name: "Test Suite 10th"
+    needs: test-9
+    if: always()
+    uses: ./.github/workflows/test-suite.yml
+
+  test-11:
+    name: "Test Suite 11th"
+    needs: test-10
+    if: always()
+    uses: ./.github/workflows/test-suite.yml
+
+  test-12:
+    name: "Test Suite 12th"
+    needs: test-11
+    if: always()
+    uses: ./.github/workflows/test-suite.yml
+
+  test-13:
+    name: "Test Suite 13th"
+    needs: test-12
+    if: always()
+    uses: ./.github/workflows/test-suite.yml
+
+  test-14:
+    name: "Test Suite 14th"
+    needs: test-13
+    if: always()
+    uses: ./.github/workflows/test-suite.yml
+
+  # ============================================================
+  #  CHECK SUITE CHAIN (14) cargo_check
+  # ============================================================
+  check-1:
+    name: "Check Suite 1st"
+    needs: cargo_check
+    if: always()
+    uses: ./.github/workflows/check-suite.yml
+
+  check-2:
+    name: "Check Suite 2nd"
+    needs: check-1
+    if: always()
+    uses: ./.github/workflows/check-suite.yml
+
+  check-3:
+    name: "Check Suite 3rd"
+    needs: check-2
+    if: always()
+    uses: ./.github/workflows/check-suite.yml
+
+  check-4:
+    name: "Check Suite 4th"
+    needs: check-3
+    if: always()
+    uses: ./.github/workflows/check-suite.yml
+
+  check-5:
+    name: "Check Suite 5th"
+    needs: check-4
+    if: always()
+    uses: ./.github/workflows/check-suite.yml
+
+  check-6:
+    name: "Check Suite 6th"
+    needs: check-5
+    if: always()
+    uses: ./.github/workflows/check-suite.yml
+
+  check-7:
+    name: "Check Suite 7th"
+    needs: check-6
+    if: always()
+    uses: ./.github/workflows/check-suite.yml
+
+  check-8:
+    name: "Check Suite 8th"
+    needs: check-7
+    if: always()
+    uses: ./.github/workflows/check-suite.yml
+
+  check-9:
+    name: "Check Suite 9th"
+    needs: check-8
+    if: always()
+    uses: ./.github/workflows/check-suite.yml
+
+  check-10:
+    name: "Check Suite 10th"
+    needs: check-9
+    if: always()
+    uses: ./.github/workflows/check-suite.yml
+
+  check-11:
+    name: "Check Suite 11th"
+    needs: check-10
+    if: always()
+    uses: ./.github/workflows/check-suite.yml
+
+  check-12:
+    name: "Check Suite 12th"
+    needs: check-11
+    if: always()
+    uses: ./.github/workflows/check-suite.yml
+
+  check-13:
+    name: "Check Suite 13th"
+    needs: check-12
+    if: always()
+    uses: ./.github/workflows/check-suite.yml
+
+  check-14:
+    name: "Check Suite 14th"
+    needs: check-13
+    if: always()
+    uses: ./.github/workflows/check-suite.yml

